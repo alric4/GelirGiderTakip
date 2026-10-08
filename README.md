@@ -8,6 +8,7 @@ C# ve SQL Server (ADO.NET) ile yazılmış, konsol tabanlı kişisel gelir-gider
 - Kayıtları listeleme
 - Kayıt güncelleme
 - Kayıt silme
+- - Toplam gelir, toplam gider ve bakiye hesabı
 
 ## Kullanılan Teknolojiler
 
@@ -36,6 +37,5 @@ Veritabanı adı: `GelirGiderDb`, tablo adı: `Hareketler`
 
 ## Yapılacaklar
 
-- Toplam gelir, toplam gider ve bakiye hesabı
 - Türe ve kategoriye göre filtreleme
 - Hatalı girişlerin kontrolü
