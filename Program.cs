@@ -149,10 +149,55 @@ namespace GelirGiderTakip
                 }
             }
         }
+        static List<Hareket> HareketleriGetir()
+        {
+            List<Hareket> hareketler = new List<Hareket>();
+            string connectionString = "Data Source=.\\SQLEXPRESS2025;Initial Catalog=GelirGiderDb;Integrated Security=True";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Hareketler";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Hareket hareket = new Hareket(
+                                (int)reader["HareketId"],
+                                (string)reader["Aciklama"],
+                                (decimal)reader["Tutar"],
+                                (string)reader["Tur"].ToString().Trim(),
+                                (DateTime)reader["Tarih"],
+                                (string)reader["Kategori"]
+                            );
+                            hareketler.Add(hareket);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Hata: " + ex.Message);
+                    }
+                }
+            }
+            return hareketler;
+        }
+        static void OzetGoster()
+        {
+            List<Hareket> hareketler = HareketleriGetir();
+            decimal toplamGelir = hareketler.Where(h => h.Tur == "Gelir").Sum(h => h.Tutar);
+            decimal toplamGider = hareketler.Where(h => h.Tur == "Gider").Sum(h => h.Tutar);
+            decimal bakiye = toplamGelir - toplamGider;
+            Console.WriteLine($"Toplam Gelir: {toplamGelir}");
+            Console.WriteLine($"Toplam Gider: {toplamGider}");
+            Console.WriteLine($"Bakiye: {bakiye}");
+        }
 
         static void Main(string[] args)
         {
-        int islem;
+        
+            int islem;
             do
             {
                     Console.WriteLine("0-Çıkış");
@@ -160,6 +205,7 @@ namespace GelirGiderTakip
                     Console.WriteLine("2-Hareket Ekle");
                     Console.WriteLine("3-Hareket Sil");
                     Console.WriteLine("4-Hareket Güncelle");
+                    Console.WriteLine("5-Özet Göster");
                     Console.Write("Yapmak istediğiniz işlemi giriniz:");
                 try
                 {
@@ -214,6 +260,10 @@ namespace GelirGiderTakip
                     string kategori = Console.ReadLine();
                     Hareket hareket = new Hareket(hareketId, aciklama, tutar, tur, tarih, kategori);
                     HareketGuncelle(hareket);
+                }
+                else if (islem == 5)
+                {
+                    OzetGoster();
                 }
                 else if (islem == 0)
                 {
