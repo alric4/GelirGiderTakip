@@ -170,7 +170,7 @@ namespace GelirGiderTakip
                                 (decimal)reader["Tutar"],
                                 (string)reader["Tur"].ToString().Trim(),
                                 (DateTime)reader["Tarih"],
-                                (string)reader["Kategori"]
+                                (string)reader["Kategori"].ToString().Trim()
                             );
                             hareketler.Add(hareket);
                         }
@@ -193,7 +193,40 @@ namespace GelirGiderTakip
             Console.WriteLine($"Toplam Gider: {toplamGider}");
             Console.WriteLine($"Bakiye: {bakiye}");
         }
+        static void TureGoreListele(string tur)
+        {
+            List<Hareket> hareketler = HareketleriGetir();
+            bool bulundu = false;
+            var filtrelenmisHareketler = hareketler.Where(h => h.Tur.Equals(tur, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            Console.WriteLine($"{tur} Hareketler Listesi:");
+            foreach (var hareket in filtrelenmisHareketler)
+            {
+                Console.WriteLine(hareket);
+                bulundu = true;
+            }
+            if(bulundu == false)
+            {
+                Console.WriteLine($"{tur} türünde hareket bulunamadı.");
+            }
+        }
+        static public void KategoriyeGoreListele(string kategori)
+        {
+            List<Hareket> hareketler = HareketleriGetir();
+            var filtrelenmisHareketler = hareketler.Where(h => h.Kategori.Equals(kategori, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
+            if (filtrelenmisHareketler.Count == 0)
+            {
+                Console.WriteLine($"{kategori} kategorisine ait hareket bulunamadı.");
+            }
+            else
+            { 
+                Console.WriteLine($"{kategori} Kategorisine Ait Hareketler Listesi:");
+                foreach (var hareket in filtrelenmisHareketler)
+                {
+                    Console.WriteLine(hareket);
+                }
+            }
+        }
         static void Main(string[] args)
         {
         
@@ -206,6 +239,8 @@ namespace GelirGiderTakip
                     Console.WriteLine("3-Hareket Sil");
                     Console.WriteLine("4-Hareket Güncelle");
                     Console.WriteLine("5-Özet Göster");
+                    Console.WriteLine("6-Türe Göre Listele");
+                    Console.WriteLine("7-Kategoriye Göre Listele");
                     Console.Write("Yapmak istediğiniz işlemi giriniz:");
                 try
                 {
@@ -264,6 +299,18 @@ namespace GelirGiderTakip
                 else if (islem == 5)
                 {
                     OzetGoster();
+                }
+                else if (islem == 6)
+                {
+                    Console.Write("Listelemek istediğiniz türü giriniz (Gelir/Gider): ");
+                    string tur = Console.ReadLine();
+                    TureGoreListele(tur);
+                }
+                else if (islem == 7)
+                {
+                    Console.Write("Listelemek istediğiniz kategoriyi giriniz: ");
+                    string kategori = Console.ReadLine();
+                    KategoriyeGoreListele(kategori);
                 }
                 else if (islem == 0)
                 {
