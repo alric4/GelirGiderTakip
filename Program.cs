@@ -227,6 +227,73 @@ namespace GelirGiderTakip
                 }
             }
         }
+        static decimal TutarOku()
+        {
+            while (true)
+            {
+                Console.Write("Tutar: ");
+                string girdi = Console.ReadLine();
+                girdi = girdi.Replace('.', ',');
+                if (decimal.TryParse(girdi, out decimal tutar) && tutar > 0)
+                {
+                    return tutar;
+                }
+                Console.WriteLine("Hatalı tutar! Pozitif bir sayı girin (örnek: 150,50)");
+            }
+        }
+        static DateTime TarihOku()
+        {
+            while (true)
+            {
+                Console.Write("Tarih (yyyy-MM-dd): ");
+                string girdi = Console.ReadLine();
+                if (DateTime.TryParse(girdi, out DateTime tarih))
+                {
+                    return tarih;
+                }
+                Console.WriteLine("Hatalı tarih! Örnek: 2026-10-10");
+            }
+        }
+        static string TurOku()
+        {
+            while (true)
+            {
+                Console.Write("Tür (Gelir/Gider): ");
+                string tur = Console.ReadLine();
+                if (tur.Equals("Gelir", StringComparison.CurrentCultureIgnoreCase) || tur.Equals("Gider", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return tur;
+                }
+                Console.WriteLine("Hatalı tür! 'Gelir' veya 'Gider' girin.");
+            }
+        }
+        static int IdOku()
+        {
+            while (true)
+            {
+                Console.Write("Hareket Id: ");
+                string girdi = Console.ReadLine();
+                if (int.TryParse(girdi, out int id) && id > 0)
+                {
+                    return id;
+                }
+                Console.WriteLine("Hatalı Id! Pozitif bir sayı girin.");
+            }
+        }
+        static string MetinOku(string mesaj)
+        {
+            while (true)
+            {
+                Console.Write(mesaj);
+                string girdi = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(girdi))
+                {
+                    return girdi.Trim();
+                }
+                Console.WriteLine("Hatalı giriş! Boş bir değer giremezsiniz.");
+            }
+        }
+        
         static void Main(string[] args)
         {
         
@@ -258,41 +325,29 @@ namespace GelirGiderTakip
                 else if(islem == 2)
                 {
                     Console.WriteLine();
-                    Console.Write("Açıklama: ");
-                    string aciklama = Console.ReadLine();
-                    Console.Write("Tutar: ");
-                    decimal tutar = decimal.Parse(Console.ReadLine());
-                    Console.Write("Tür (Gelir/Gider): ");
-                    string tur = Console.ReadLine();
-                    Console.Write("Tarih (yyyy-MM-dd): ");
-                    DateTime tarih = DateTime.Parse(Console.ReadLine());
-                    Console.Write("Kategori: ");
-                    string kategori = Console.ReadLine();
+                    string aciklama = MetinOku("Açıklama: ");
+                    decimal tutar = TutarOku();
+                    string tur = TurOku();
+                    DateTime tarih = TarihOku();
+                    string kategori = MetinOku("Kategori: ");
                     Hareket hareket = new Hareket(0, aciklama, tutar, tur, tarih, kategori);
                     HareketEkle(hareket);
                 }
                 else if(islem==3)
                 {
                     Console.WriteLine("Silme");
-                    Console.Write("Silinecek Hareketin Id'si: ");
-                    int hareketId = int.Parse(Console.ReadLine());
+                    int hareketId = IdOku();
                     HareketSil(hareketId);
                     Console.WriteLine("Hareket başarıyla silindi.");
                 }
                 else if (islem == 4)
                 {
-                    Console.Write("Güncellenecek Hareketin Id'si: ");
-                    int hareketId = int.Parse(Console.ReadLine());
-                    Console.Write("Yeni Açıklama: ");
-                    string aciklama = Console.ReadLine();
-                    Console.Write("Yeni Tutar: ");
-                    decimal tutar = decimal.Parse(Console.ReadLine());
-                    Console.Write("Yeni Tür (Gelir/Gider): ");
-                    string tur = Console.ReadLine();
-                    Console.Write("Yeni Tarih (yyyy-MM-dd): ");
-                    DateTime tarih = DateTime.Parse(Console.ReadLine());
-                    Console.Write("Yeni Kategori: ");
-                    string kategori = Console.ReadLine();
+                    int hareketId = IdOku();
+                    string aciklama = MetinOku("Açıklama: ");
+                    decimal tutar = TutarOku();
+                    string tur = TurOku();
+                    DateTime tarih = TarihOku();
+                    string kategori = MetinOku("Kategori: ");
                     Hareket hareket = new Hareket(hareketId, aciklama, tutar, tur, tarih, kategori);
                     HareketGuncelle(hareket);
                 }
